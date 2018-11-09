@@ -14,6 +14,7 @@ package-lock.json
 # Prod Bundle
 /build/*
 !/build/.keep
+!/build/index.html
 
 .vscode
 .idea
