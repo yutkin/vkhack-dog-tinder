@@ -11,17 +11,7 @@ services:
       - frontend
     volumes:
       - ./src/backend/etc/nginx.conf:/etc/nginx/nginx.conf
-      - shared_volume:/var/www/snek-gc.misha.im/
-    depends_on:
-      - npm
-  
-  npm:
-    build: ./src/frontend/
-    volumes:
-      - shared_volume:/frontend/build
+      - ./src/frontend/build:/var/www/snek-gc.misha.im/
 
 networks:
   frontend:
-
-volumes:
-  shared_volume:

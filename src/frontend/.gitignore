@@ -12,9 +12,10 @@ npm-debug.log*
 .npm
 
 # Prod Bundle
-/build/*
-!/build/.keep
-!/build/index.html
+# /build/*
+# !/build/.keep
+# !/build/index.html
+!/build
 
 .vscode
 .idea
