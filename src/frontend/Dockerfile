@@ -1,7 +1,7 @@
-FROM node:latest
+FROM node:8.12.0
 
 ADD ./ /frontend
 
 WORKDIR /frontend
 
-RUN npm ci && npm run build
+RUN npm --version && npm ci && npm run build
