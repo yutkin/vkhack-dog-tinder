@@ -9,21 +9,21 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 const osname = platform();
 
 const Persik = props => (
-	<Panel id={props.id}>
-		<PanelHeader
-			left={<HeaderButton onClick={props.go} data-to="home">
-				{osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
-			</HeaderButton>}
-		>
-			Persik
-		</PanelHeader>
-		<img className="Persik" src={persik} alt="Persik The Cat"/>
-	</Panel>
+    <Panel id={props.id}>
+        <PanelHeader
+            left={<HeaderButton onClick={props.go} data-to="home">
+                {osname === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
+            </HeaderButton>}
+        >
+            Persik
+        </PanelHeader>
+        <img className="Persik" src={persik} alt="Persik The Cat"/>
+    </Panel>
 );
 
 Persik.propTypes = {
-	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    go: PropTypes.func.isRequired,
 };
 
 export default Persik;
