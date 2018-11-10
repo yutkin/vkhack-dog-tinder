@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/animals/like/reset', views.animal_reset_likes),
 
     path('api/tasks', views.task_list),
+    path('api/tasks/apply/<int:pk>', views.task_apply),
 ]
