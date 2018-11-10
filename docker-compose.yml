@@ -6,6 +6,8 @@ services:
     tty: true
     networks:
       - frontend
+    volumes:
+      - shared:/app/static/
 
   nginx:
     build: ./src/nginx/
@@ -18,8 +20,12 @@ services:
       - frontend
     volumes:
       - ./src/frontend/build:/var/www/snek-gc.misha.im/
+      - shared:/var/www/snek-gc.misha.im/static/
     depends_on:
       - django
 
 networks:
   frontend:
+
+volumes:
+  shared:
