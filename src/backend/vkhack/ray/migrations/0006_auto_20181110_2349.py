@@ -5,24 +5,22 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0005_auto_20181110_2030'),
-    ]
+    dependencies = [("ray", "0005_auto_20181110_2030")]
 
     operations = [
         migrations.AlterField(
-            model_name='animal',
-            name='created',
+            model_name="animal",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, db_index=True),
         ),
         migrations.AlterField(
-            model_name='animal',
-            name='liked_by_one',
+            model_name="animal",
+            name="liked_by_one",
             field=models.IntegerField(db_index=True, null=True),
         ),
         migrations.AlterField(
-            model_name='animal',
-            name='liked_by_two',
+            model_name="animal",
+            name="liked_by_two",
             field=models.IntegerField(db_index=True, null=True),
         ),
     ]

@@ -5,14 +5,8 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0008_task_persons_applied'),
-    ]
+    dependencies = [("ray", "0008_task_persons_applied")]
 
     operations = [
-        migrations.RenameField(
-            model_name='task',
-            old_name='name',
-            new_name='title',
-        ),
+        migrations.RenameField(model_name="task", old_name="name", new_name="title")
     ]

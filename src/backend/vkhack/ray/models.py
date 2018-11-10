@@ -15,7 +15,7 @@ class Animal(models.Model):
     lon = models.FloatField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ("created",)
 
 
 class Task(models.Model):
@@ -35,4 +35,4 @@ class Task(models.Model):
     owner = models.IntegerField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ("created",)

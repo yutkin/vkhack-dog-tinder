@@ -5,26 +5,22 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0004_auto_20181110_1814'),
-    ]
+    dependencies = [("ray", "0004_auto_20181110_1814")]
 
     operations = [
         migrations.AddField(
-            model_name='animal',
-            name='lat',
+            model_name="animal",
+            name="lat",
             field=models.FloatField(default=0),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='animal',
-            name='lon',
+            model_name="animal",
+            name="lon",
             field=models.FloatField(default=0),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='animal',
-            name='photo',
-            field=models.TextField(),
+            model_name="animal", name="photo", field=models.TextField()
         ),
     ]

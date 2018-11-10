@@ -19,9 +19,7 @@ VK_APP_KEY = "916168e8916168e8916168e89e91079bd199161916168e8ca84da8c20213fddf8e
 def notify_user(user_id, msg):
     params = dict(user_ids=user_id, message=msg, access_token=VK_APP_KEY, v=5.52)
     resp = requests.get(
-        f"https://api.vk.com/method/notifications.sendMessage",
-        params=params,
-        timeout=5,
+        f"https://api.vk.com/method/notifications.sendMessage", params=params, timeout=5
     )
     resp.raise_for_status()
     logger.debug(f"MESSAGE SENT {resp.text}")
@@ -65,6 +63,18 @@ def animal_reset_likes(request):
     return HttpResponse(status=200)
 
 
+@api_view(["POST"])
+def animal_reset_likes_detail(request, pk):
+    an = Animal.objects.get(pk=pk)
+
+    if not an:
+        return HttpResponse(status=400)
+
+    an.update(liked_by_one=None, liked_by_two=None)
+
+    return HttpResponse(status=200)
+
+
 @api_view(["GET", "POST"])
 def animal_list(request):
     """
@@ -88,8 +98,9 @@ def animal_list(request):
 
         if user_id:
             animals = Animal.objects.filter(
-                ~Q(liked_by_one=user_id) & ~Q(liked_by_two=user_id) &
-                (Q(liked_by_one=None) | Q(liked_by_two=None))
+                ~Q(liked_by_one=user_id)
+                & ~Q(liked_by_two=user_id)
+                & (Q(liked_by_one=None) | Q(liked_by_two=None))
             )[:limit]
         else:
             animals = Animal.objects.all()[:limit]
@@ -108,11 +119,11 @@ def animal_detail(request, pk):
     except Animal.DoesNotExist:
         return HttpResponse(status=404)
 
-    if request.method == 'GET':
+    if request.method == "GET":
         serializer = AnimalSerializer(snippet)
         return JsonResponse(serializer.data)
 
-    elif request.method == 'PUT':
+    elif request.method == "PUT":
         data = JSONParser().parse(request)
         serializer = AnimalSerializer(snippet, data=data)
         if serializer.is_valid():
@@ -125,8 +136,8 @@ def animal_detail(request, pk):
 def users_matched(request, uid):
 
     animals = Animal.objects.filter(
-        (~Q(liked_by_one=None) & ~Q(liked_by_two=None)) &
-        (Q(liked_by_one=uid) | Q(liked_by_two=uid))
+        (~Q(liked_by_one=None) & ~Q(liked_by_two=None))
+        & (Q(liked_by_one=uid) | Q(liked_by_two=uid))
     )[:15]
 
     serializer = AnimalSerializer(animals, many=True)
@@ -164,14 +175,17 @@ def task_apply(request, pk):
     List all code snippets, or create a new snippet.
     """
 
-    # data = JSONParser().parse(request)
-
     task = Task.objects.get(pk=pk)
 
     if not task:
         return HttpResponse(status=400)
 
-    task.persons_applied = min(task.persons_needed, task.persons_applied + 1)
+    new_val = task.persons_applied + 1
+
+    if new_val > task.persons_needed:
+        return HttpResponse(status=400)
+
+    task.persons_applied = new_val
     task.save()
 
     return HttpResponse(status=200)
