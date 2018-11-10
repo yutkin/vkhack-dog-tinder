@@ -1,8 +1,9 @@
 import React from 'react';
 import { PanelHeader } from '@vkontakte/vkui';
+
 import Cards, { Card } from 'react-swipe-deck';
 
-import { getAnimals } from '../api/snek';
+import { getAnimals, likeAnimal } from '../api/snek';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import './Discover.css';
@@ -18,6 +19,9 @@ export default class Discover extends React.Component {
         };
 
         this.handleTinderRef = this.handleTinderRef.bind(this);
+        this.handleSwipeLeft = this.handleSwipeLeft.bind(this);
+        this.handleSwipeRight = this.handleSwipeRight.bind(this);
+        this.handleStackEnd = this.handleStackEnd.bind(this);
     }
 
     componentWillMount() {
@@ -25,8 +29,20 @@ export default class Discover extends React.Component {
     }
 
     async fetchAnimals() {
-        const animals = await getAnimals();
+        const animals = await getAnimals(23878107);
         this.setState({ animals });
+    }
+
+    async handleSwipeLeft() {
+        console.log('nothing');
+    }
+
+    async handleSwipeRight(animalId) {
+        likeAnimal(animalId, 23878107);
+    }
+
+    handleStackEnd() {
+        alert('You reached the end.');
     }
 
     handleTinderRef(ref) {
@@ -44,14 +60,14 @@ export default class Discover extends React.Component {
 
                 <div ref={this.handleTinderRef} className="tinder-container">
                     <Cards
-                        onEnd={() => console.log('end')}
+                        onEnd={this.handleStackEnd}
                         size={[this.state.width, this.state.height]}
                         cardSize={[this.state.width * 0.93, this.state.height * 0.86]}>
                         {this.state.animals.map(({id, name, description, photo}) => (
                             <Card
                                 key={id}
-                                onSwipeLeft={() => console.log('swipe left')}
-                                onSwipeRight={() => console.log('swipe right')}>
+                                onSwipeLeft={this.handleSwipeLeft}
+                                onSwipeRight={() => this.handleSwipeRight(id)}>
                                 <div className="tinder-card">
                                     <div className="tinder-card-bg" style={{
                                         backgroundImage: `url('${photo}')`

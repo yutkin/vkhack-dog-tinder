@@ -5,6 +5,7 @@ import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
 
 import Discover from './panels/Discover';
+import Matches from './panels/Matches';
 
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -46,7 +47,7 @@ class App extends React.Component {
             }>
                 <View id="matches" activePanel="matches">
                     <Panel id="matches">
-                        <PanelHeader>Matches</PanelHeader>
+                        <Matches />
                     </Panel>
                 </View>
                 <View id="discover" activePanel="discover">
