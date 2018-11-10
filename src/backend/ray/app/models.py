@@ -16,8 +16,10 @@ class Task(models.Model):
     # pics = models.ForeignKey()
     # models.ImageField()
 
+
     class Meta:
         ordering = ('created',)
+
 
     def save(self, *args, **kwargs):
         super(Task, self).save(*args, **kwargs)
