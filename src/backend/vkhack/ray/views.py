@@ -70,7 +70,9 @@ def animal_reset_likes_detail(request, pk):
     if not an:
         return HttpResponse(status=400)
 
-    an.update(liked_by_one=None, liked_by_two=None)
+    an.liked_by_one = None
+    an.liked_by_two = None
+    an.save()
 
     return HttpResponse(status=200)
 
