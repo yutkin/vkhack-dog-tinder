@@ -156,3 +156,22 @@ def task_list(request):
 
         serializer = TaskSerializer(task, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(["POST"])
+def task_apply(request, pk):
+    """
+    List all code snippets, or create a new snippet.
+    """
+
+    # data = JSONParser().parse(request)
+
+    task = Task.objects.get(pk=pk)
+
+    if not task:
+        return HttpResponse(status=400)
+
+    task.persons_applied = min(task.persons_needed, task.persons_applied + 1)
+    task.save()
+
+    return HttpResponse(status=200)
