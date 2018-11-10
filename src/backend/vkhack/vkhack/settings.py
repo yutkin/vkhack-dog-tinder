@@ -146,4 +146,4 @@ LOGGING = {
     },
 }
 
-# APPEND_SLASH = True
+APPEND_SLASH = False
