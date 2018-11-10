@@ -100,3 +100,16 @@ def animal_detail(request, pk):
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+def users_matched(request, uid):
+
+    animals = Animal.objects.filter(
+        (~Q(liked_by_one=None) & ~Q(liked_by_two=None)) &
+        (Q(liked_by_one=uid) | Q(liked_by_two=uid))
+    )
+
+    serializer = AnimalSerializer(animals, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
