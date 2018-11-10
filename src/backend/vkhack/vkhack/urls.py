@@ -19,8 +19,8 @@ from ray import views
 
 
 urlpatterns = [
-    path('api/animals/', views.animal_list),
-    path('api/animals/<int:pk>/', views.animal_detail),
-    path('api/animals/like/', views.animal_like),
-    path('api/animals/like/reset/', views.animal_reset_likes),
+    path('api/animals', views.animal_list),
+    path('api/animals/<int:pk>', views.animal_detail),
+    path('api/animals/like', views.animal_like),
+    path('api/animals/like/reset', views.animal_reset_likes),
 ]
