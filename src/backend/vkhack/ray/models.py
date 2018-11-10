@@ -6,7 +6,7 @@ class Animal(models.Model):
     name = models.CharField(max_length=128)
     type = models.CharField(max_length=128)
     description = models.TextField(max_length=1024)
-    photo = models.TextField(editable=False)
+    photo = models.TextField()
 
     liked_by_one = models.IntegerField(null=True)
     liked_by_two = models.IntegerField(null=True)

@@ -5,6 +5,7 @@ from rest_framework.parsers import JSONParser
 from ray.models import Animal
 from ray.serializer import AnimalSerializer
 from rest_framework.decorators import api_view
+from django.db.models import Q
 
 import logging
 
@@ -41,8 +42,20 @@ def animal_list(request):
     """
 
     if request.method == 'GET':
-        snippets = Animal.objects.all()
-        serializer = AnimalSerializer(snippets, many=True)
+
+        hidden_matches = request.GET.get("hiddenMatches", "false")
+
+        if hidden_matches not in ('true', 'false'):
+            return HttpResponse(status=404)
+
+        if hidden_matches == "true":
+            animals = Animal.objects.filter(
+                Q(liked_by_one=None) | Q(liked_by_two=None)
+            )
+        else:
+            animals = Animal.objects.all()
+
+        serializer = AnimalSerializer(animals, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'POST':
