@@ -90,14 +90,15 @@ def animal_list(request):
 
     if request.method == "GET":
         user_id = int(request.GET.get("user_id", 0))
+        limit = int(request.GET.get("limit", 15))
 
         if user_id:
             animals = Animal.objects.filter(
                 ~Q(liked_by_one=user_id) & ~Q(liked_by_two=user_id) &
                 (Q(liked_by_one=None) | Q(liked_by_two=None))
-            )
+            )[:limit]
         else:
-            animals = Animal.objects.all()
+            animals = Animal.objects.all()[:limit]
 
         serializer = AnimalSerializer(animals, many=True)
         return JsonResponse(serializer.data, safe=False)
