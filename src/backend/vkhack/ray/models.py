@@ -2,14 +2,14 @@ from django.db import models
 
 
 class Animal(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
     name = models.CharField(max_length=128)
     type = models.CharField(max_length=128)
     description = models.TextField(max_length=1024)
     photo = models.TextField()
 
-    liked_by_one = models.IntegerField(null=True)
-    liked_by_two = models.IntegerField(null=True)
+    liked_by_one = models.IntegerField(null=True, db_index=True)
+    liked_by_two = models.IntegerField(null=True, db_index=True)
 
     lat = models.FloatField()
     lon = models.FloatField()

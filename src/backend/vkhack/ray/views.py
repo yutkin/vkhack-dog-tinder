@@ -61,12 +61,12 @@ def animal_like(request):
 
 @api_view(["POST"])
 def animal_reset_likes(request):
-    animals = Animal.objects.all()
+    animals = Animal.objects.all().update(liked_by_one=None, liked_by_two=None)
 
-    for animal in animals:
-        animal.liked_by_one = None
-        animal.liked_by_two = None
-        animal.save(update_fields=["liked_by_one", "liked_by_two"])
+    # for animal in animals:
+    #     animal.liked_by_one = None
+    #     animal.liked_by_two = None
+    #     animal.save(update_fields=["liked_by_one", "liked_by_two"])
 
     return HttpResponse(status=200)
 
