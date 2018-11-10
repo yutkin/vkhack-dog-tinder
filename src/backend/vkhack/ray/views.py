@@ -30,12 +30,12 @@ def animal_like(request):
 
     data = JSONParser().parse(request)
 
-    animal = Animal.objects.get(pk=data.get("id"))
+    try:
+        animal = Animal.objects.get(pk=data.get("id"))
+    except Animal.DoesNotExist:
+        return HttpResponse(status=404)
 
     user_id = data.get("user_id")
-
-    if not animal:
-        return HttpResponse(status=404)
 
     if animal.liked_by_one and animal.liked_by_two:
         return HttpResponse(status=200)
@@ -51,7 +51,7 @@ def animal_like(request):
 
     try:
         notify_user(user_id, msg)
-    except Exception:
+    except requests.HTTPError:
         logger.error(f"Cannot send notification", exc_info=True)
 
     return HttpResponse(status=200)
@@ -86,7 +86,6 @@ def animal_list(request):
 
         if serializer.is_valid():
             serializer.save()
-
             return JsonResponse(serializer.data, status=201)
 
         return JsonResponse(serializer.errors, status=400)
