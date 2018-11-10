@@ -47,31 +47,12 @@ def animal_reset_likes(request):
     return HttpResponse(status=200)
 
 
-@api_view(["POST", "GET"])
+@api_view(["GET", "POST"])
 def animal_list(request):
     """
     List all code snippets, or create a new snippet.
     """
-
-    if request.method == 'GET':
-
-        hidden_matches = request.GET.get("hiddenMatches", "false")
-
-        if hidden_matches not in ('true', 'false'):
-            return HttpResponse(status=404)
-
-        if hidden_matches == "true":
-            animals = Animal.objects.filter(
-                Q(liked_by_one=None) | Q(liked_by_two=None)
-            )
-        else:
-            animals = Animal.objects.all()
-
-        serializer = AnimalSerializer(animals, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-
+    if request.method == "POST":
         data = JSONParser().parse(request)
 
         serializer = AnimalSerializer(data=data)
@@ -82,6 +63,20 @@ def animal_list(request):
             return JsonResponse(serializer.data, status=201)
 
         return JsonResponse(serializer.errors, status=400)
+
+    if request.method == "GET":
+        user_id = int(request.GET.get("user_id", 0))
+
+        if user_id:
+            animals = Animal.objects.filter(
+                ~Q(liked_by_one=user_id) & ~Q(liked_by_two=user_id) &
+                (Q(liked_by_one=None) | Q(liked_by_two=None))
+            )
+        else:
+            animals = Animal.objects.all()
+
+        serializer = AnimalSerializer(animals, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
 
 @csrf_exempt
