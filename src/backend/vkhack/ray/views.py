@@ -21,6 +21,7 @@ def notify_user(user_id, msg):
     resp = requests.get(
         f"https://api.vk.com/method/notifications.sendMessage",
         params=params,
+        access_token=VK_APP_KEY,
         timeout=5,
     )
     resp.raise_for_status()
