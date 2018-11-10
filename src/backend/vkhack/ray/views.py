@@ -17,7 +17,7 @@ VK_APP_KEY = "916168e8916168e8916168e89e91079bd199161916168e8ca84da8c20213fddf8e
 
 
 def notify_user(user_id, msg):
-    params = dict(user_ids=user_id, message=msg, access_token=VK_APP_KEY)
+    params = dict(user_ids=user_id, message=msg, access_token=VK_APP_KEY, v=5.52)
     resp = requests.get(
         f"https://api.vk.com/method/notifications.sendMessage",
         params=params,
