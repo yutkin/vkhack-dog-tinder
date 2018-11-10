@@ -2,8 +2,8 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from ray.models import Animal
-from ray.serializer import AnimalSerializer
+from ray.models import Animal, Task
+from ray.serializer import AnimalSerializer, TaskSerializer
 from rest_framework.decorators import api_view
 from django.db.models import Q
 
@@ -132,3 +132,27 @@ def users_matched(request, uid):
     serializer = AnimalSerializer(animals, many=True)
 
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(["GET", "POST"])
+def task_list(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+
+        serializer = TaskSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse(serializer.errors, status=400)
+
+    if request.method == "GET":
+        task = Task.objects.all()
+
+        serializer = TaskSerializer(task, many=True)
+        return JsonResponse(serializer.data, safe=False)

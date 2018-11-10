@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from ray.models import Animal
-
+from ray.models import Animal, Task
 
 class AnimalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,4 +14,22 @@ class AnimalSerializer(serializers.ModelSerializer):
             'liked_by_two',
             "lat",
             "lon",
+        )
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'name',
+            'type',
+            'description',
+            'photo',
+            'persons_needed',
+            'persons_applied',
+            "lat",
+            "lon",
+            "owner",
+            "start_date",
         )
