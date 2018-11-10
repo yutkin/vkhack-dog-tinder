@@ -19,9 +19,11 @@
     "@vkontakte/icons": "^1.2.1",
     "@vkontakte/vkui": "^2.13.0",
     "@vkontakte/vkui-connect": "^1.1.2",
+    "@vkontakte/vkui-connect-mock": "^1.0.5",
     "core-js": "^2.5.7",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
-    "react-dom": "^16.6.1"
+    "react-dom": "^16.6.1",
+    "react-swipe-card": "^0.1.4"
   }
 }
