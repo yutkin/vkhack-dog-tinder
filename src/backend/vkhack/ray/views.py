@@ -8,8 +8,23 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 
 import logging
+import requests
 
 logger = logging.getLogger(__name__)
+
+
+VK_APP_KEY = "916168e8916168e8916168e89e91079bd199161916168e8ca84da8c20213fddf8ee0283"
+
+
+def notify_user(user_id, msg):
+    params = dict(user_ids=user_id, message=msg, access_token=VK_APP_KEY, v=5.52)
+    resp = requests.get(
+        f"https://api.vk.com/method/notifications.sendMessage",
+        params=params,
+        timeout=5,
+    )
+    resp.raise_for_status()
+    logger.debug(f"MESSAGE SENT {resp.text}")
 
 
 @api_view(["POST"])
@@ -19,6 +34,8 @@ def animal_like(request):
 
     animal = Animal.objects.get(pk=data.get("id"))
 
+    user_id = data.get("user_id")
+
     if not animal:
         return HttpResponse(status=404)
 
@@ -26,11 +43,18 @@ def animal_like(request):
         return HttpResponse(status=200)
 
     if animal.liked_by_one:
-        animal.liked_by_two = data.get("user_id")
+        animal.liked_by_two = user_id
     else:
-        animal.liked_by_one = data.get("user_id")
+        animal.liked_by_one = user_id
 
     animal.save()
+
+    msg = f"У Вас новая пара! Проверьте приложение."
+
+    try:
+        notify_user(user_id, msg)
+    except Exception:
+        logger.error(f"Cannot send message", exc_info=True)
 
     return HttpResponse(status=200)
 
