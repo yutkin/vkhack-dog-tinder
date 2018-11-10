@@ -20,7 +20,7 @@ services:
       - frontend
     volumes:
       - ./src/frontend/build:/var/www/snek-gc.misha.im/
-      - shared:/var/www/snek-gc.misha.im/static/
+      - shared:/var/www/snek-gc.misha.im.drf/static/
     depends_on:
       - django
 
