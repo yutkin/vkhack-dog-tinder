@@ -21,4 +21,5 @@ from ray import views
 urlpatterns = [
     path('api/animals/', views.animal_list),
     path('api/animals/<int:pk>', views.animal_detail),
+    path('api/animals/like/', views.animal_like),
 ]
