@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PanelHeader, List, Cell, Avatar } from '@vkontakte/vkui';
 import connect from '@vkontakte/vkui-connect';
-import VKConnect, { response as res } from '@vkontakte/vkui-connect-mock';
+// import connect, { response as res } from '@vkontakte/vkui-connect-mock';
 
 import { getMatches } from '../api/snek';
 import usersStub from '../api/stub_users.json';
 
-res.VKWebAppCallAPIMethod.data = {
-    type: 'VKWebAppCallAPIMethodResult',
-    data: {
-        requestId: 'wow',
-        response: usersStub
-    }
-};
-console.log(res);
+// res.VKWebAppCallAPIMethod.data = {
+//     type: 'VKWebAppCallAPIMethodResult',
+//     data: {
+//         requestId: 'wow',
+//         response: usersStub
+//     }
+// };
+// console.log(res);
 
 export default class Matches extends React.Component {
     constructor(props) {
@@ -35,11 +35,11 @@ export default class Matches extends React.Component {
     componentWillMount() {
         this.fetchMatchesAndUsers();
 
-        VKConnect.subscribe(this.handleConnectEvent);
+        connect.subscribe(this.handleConnectEvent);
     }
 
     componentWillUnmount() {
-        VKConnect.unsubscribe(this.handleConnectEvent);
+        connect.unsubscribe(this.handleConnectEvent);
     }
 
     handleConnectEvent(e) {
@@ -69,7 +69,7 @@ export default class Matches extends React.Component {
             return acc.concat(userId);
         }, []);
 
-        VKConnect.send('VKWebAppCallAPIMethod', {
+        connect.send('VKWebAppCallAPIMethod', {
             'method': 'users.get',
             'params': {
                 'user_ids': userIds.join(','),
