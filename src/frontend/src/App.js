@@ -4,10 +4,11 @@ import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
 import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
 import connect from '@vkontakte/vkui-connect';
-// import connect, { response as res } from '@vkontakte/vkui-connect-mock';
+// import connect from '@vkontakte/vkui-connect-mock';
 
 import Discover from './panels/Discover';
 import Matches from './panels/Matches';
+import Match from './panels/Match';
 
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -21,10 +22,13 @@ class App extends React.Component {
         this.state = {
             activeStory: 'discover',
             currentUser: null,
-            accessToken: null
+            accessToken: null,
+            activeMatch: null
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
         this.onStoryChange = this.onStoryChange.bind(this);
+        this.openMatchPanel = this.openMatchPanel.bind(this);
+        this.closeMatchPanel = this.closeMatchPanel.bind(this);
     }
 
     componentDidMount() {
@@ -44,8 +48,16 @@ class App extends React.Component {
         }
     }
   
-    onStoryChange (e) {
-        this.setState({ activeStory: e.currentTarget.dataset.story })
+    onStoryChange(e) {
+        this.setState({ activeStory: e.currentTarget.dataset.story, activeMatch: null })
+    }
+
+    openMatchPanel(match, user) {
+        this.setState({ activeMatch: { match, user } });
+    }
+
+    closeMatchPanel() {
+        this.setState({ activeMatch: null });
     }
 
     render () {
@@ -72,9 +84,23 @@ class App extends React.Component {
                     ><Icon28More /></TabbarItem>
                 </Tabbar>
             }>
-                <View id="matches" activePanel="matches">
+                <View id="matches" activePanel={this.state.activeMatch ? 'match' : 'matches'}>
                     <Panel id="matches">
-                        <Matches currentUser={this.state.currentUser} accessToken={this.state.accessToken} />
+                        <Matches
+                            currentUser={this.state.currentUser}
+                            accessToken={this.state.accessToken}
+                            onMatchSelect={this.openMatchPanel}
+                        />
+                    </Panel>
+
+                    <Panel id="match">
+                        {this.state.activeMatch && (
+                            <Match
+                                match={this.state.activeMatch.match}
+                                user={this.state.activeMatch.user}
+                                onClose={this.closeMatchPanel}
+                            />
+                        )}
                     </Panel>
                 </View>
                 <View id="discover" activePanel="discover">

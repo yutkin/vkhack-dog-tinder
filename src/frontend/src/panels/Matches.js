@@ -25,11 +25,13 @@ export default class Matches extends React.Component {
             usersById: null
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
+        this.onMatchClick = this.onMatchClick.bind(this);
     }
 
     static propTypes = {
         currentUser: PropTypes.object.isRequired,
-        accessToken: PropTypes.string.isRequired
+        accessToken: PropTypes.string.isRequired,
+        onMatchSelect: PropTypes.func.isrequired
     }
 
     componentWillMount() {
@@ -80,6 +82,13 @@ export default class Matches extends React.Component {
         });
     }
 
+    onMatchClick(e) {
+        this.props.onMatchSelect(
+            this.state.matches.find(({id}) => id === Number(e.currentTarget.dataset.matchId)),
+            this.state.usersById[Number(e.currentTarget.dataset.userId)]
+        );
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -99,7 +108,10 @@ export default class Matches extends React.Component {
                                 key={match.id}
                                 before={
                                     <Avatar src={user.photo_100} />
-                                }>
+                                }
+                                onClick={this.onMatchClick}
+                                data-match-id={match.id}
+                                data-user-id={user.id}>
                                 {`${user.first_name} ${user.last_name}`}
                             </Cell>
                         );

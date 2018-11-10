@@ -48,14 +48,20 @@ export default class Discover extends React.Component {
     }
 
     handleStackEnd() {
-        alert('You reached the end.');
+        alert('You\'ve reached the end.');
     }
 
     handleTinderRef(ref) {
         if (!ref) return;
+        const computedStyle = getComputedStyle(ref.parentNode);
+        const correctHeight = (
+            parseInt(computedStyle.height)
+            - parseInt(computedStyle.paddingTop)
+            - parseInt(computedStyle.paddingBottom)
+        );
         this.setState({
-            width: ref.offsetWidth,
-            height: ref.offsetHeight
+            width: ref.parentNode.offsetWidth,
+            height: correctHeight
         });
     }
 
@@ -77,7 +83,7 @@ export default class Discover extends React.Component {
                                 <div className="tinder-card">
                                     <div className="tinder-card-bg" style={{
                                         backgroundImage: `url('${photo}')`
-                                    }}></div>
+                                    }} />
                                     <div className="tinder-card-summary">
                                         <div className="tinder-card-summary-inner">
                                             <h2 className="tinder-card-name">

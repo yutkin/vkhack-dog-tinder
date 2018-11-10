@@ -1,0 +1,35 @@
+/* hack */
+/* .Panel__in {
+    height: 100%;
+} */
+
+.match-hero {
+    height: 27vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(255,255,255,0) 75%);
+}
+
+.match-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: auto 100%;
+    z-index: -1;
+}
+
+.match-name {
+    font-size: 32px;
+    color: #FFFFFF;
+    margin: 10px 0;
+    padding: 0 16px;
+}
+
+.match-map {
+    height: 300px;
+}
