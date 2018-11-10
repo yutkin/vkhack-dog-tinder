@@ -1,35 +1,15 @@
 from rest_framework import serializers
 from ray.models import Animal, Task
 
+
 class AnimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Animal
-        fields = (
-            'id',
-            'name',
-            'type',
-            'description',
-            'photo',
-            'liked_by_one',
-            'liked_by_two',
-            "lat",
-            "lon",
-        )
+        fields = '__all__'
 
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = (
-            'id',
-            'title',
-            'type',
-            'description',
-            'photo',
-            'persons_needed',
-            'persons_applied',
-            "lat",
-            "lon",
-            "owner",
-            "start_date",
-        )
+        fields = '__all__'
+        read_only_fields = ('persons_applied',)

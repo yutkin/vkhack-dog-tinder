@@ -25,14 +25,14 @@ class Task(models.Model):
     type = models.CharField(max_length=128)
 
     start_date = models.DateTimeField()
+
     persons_needed = models.IntegerField()
     persons_applied = models.IntegerField()
 
     lat = models.FloatField()
     lon = models.FloatField()
 
-    photo = models.TextField()
-    owner = models.TextField()
+    owner = models.IntegerField()
 
     class Meta:
         ordering = ('created',)
