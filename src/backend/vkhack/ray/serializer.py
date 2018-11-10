@@ -22,7 +22,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            'name',
+            'title',
             'type',
             'description',
             'photo',

@@ -20,7 +20,7 @@ class Animal(models.Model):
 
 class Task(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     description = models.TextField()
     type = models.CharField(max_length=128)
 
