@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '$iy)&2!ptk$%66lrfe32xldbq)9gelod3lsqxta#c_1kr0fe(g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', "localhost", 'snek-gc.misha.im']
 
@@ -145,3 +145,5 @@ LOGGING = {
         },
     },
 }
+
+APPEND_SLASH = False

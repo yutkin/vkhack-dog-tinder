@@ -12,5 +12,7 @@ class AnimalSerializer(serializers.ModelSerializer):
             'description',
             'photo',
             'liked_by_one',
-            'liked_by_two'
+            'liked_by_two',
+            "lat",
+            "lon",
         )

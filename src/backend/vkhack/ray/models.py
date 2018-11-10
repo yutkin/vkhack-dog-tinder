@@ -11,6 +11,9 @@ class Animal(models.Model):
     liked_by_one = models.IntegerField(null=True)
     liked_by_two = models.IntegerField(null=True)
 
+    lat = models.FloatField()
+    lon = models.FloatField()
+
     class Meta:
         ordering = ('created',)
 
