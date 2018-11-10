@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader } from '@vkontakte/vkui';
+import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader, platform, IOS, ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
 import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
 import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
@@ -10,7 +10,11 @@ import Discover from './panels/Discover';
 import Matches from './panels/Matches';
 import Match from './panels/Match';
 
+import { discardMatch } from './api/snek';
+
 import '@vkontakte/vkui/dist/vkui.css';
+
+const osname = platform();
 
 const APP_ID = 6746937;
 const defaultUserId = 23878107;
@@ -23,12 +27,14 @@ class App extends React.Component {
             activeStory: 'discover',
             currentUser: null,
             accessToken: null,
-            activeMatch: null
+            activeMatch: null,
+            showDiscardMatchPopout: false
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
         this.onStoryChange = this.onStoryChange.bind(this);
         this.openMatchPanel = this.openMatchPanel.bind(this);
         this.closeMatchPanel = this.closeMatchPanel.bind(this);
+        this.showDiscardMatchPopuot = this.showDiscardMatchPopuot.bind(this);
     }
 
     componentDidMount() {
@@ -60,8 +66,31 @@ class App extends React.Component {
         this.setState({ activeMatch: null });
     }
 
+    showDiscardMatchPopuot() {
+        this.setState({ showDiscardMatchPopout: true });
+    }
+
+    async discardMatch() {
+        await discardMatch(this.state.activeMatch.match.id, this.state.currentUser.id);
+        this.closeMatchPanel();
+    }
+
     render () {
         if (!this.state.currentUser || !this.state.accessToken) return null; // must be a spinner
+
+        const discardMatchPopout = this.state.showDiscardMatchPopout ? (
+            <ActionSheet
+                onClose={() => this.setState({ showDiscardMatchPopout: false })}
+                title="Отказаться от встречи?"
+                // text="I am action sheet"
+            >
+                <ActionSheetItem
+                    autoclose
+                    theme="destructive"
+                    onClick={() => this.discardMatch()}>Отказаться</ActionSheetItem>
+                {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+            </ActionSheet>
+        ) : null;
 
         return (
             <Epic activeStory={this.state.activeStory} tabbar={
@@ -84,7 +113,10 @@ class App extends React.Component {
                     ><Icon28More /></TabbarItem>
                 </Tabbar>
             }>
-                <View id="matches" activePanel={this.state.activeMatch ? 'match' : 'matches'}>
+                <View
+                    id="matches"
+                    activePanel={this.state.activeMatch ? 'match' : 'matches'}
+                    popout={discardMatchPopout}>
                     <Panel id="matches">
                         <Matches
                             currentUser={this.state.currentUser}
@@ -99,6 +131,7 @@ class App extends React.Component {
                                 match={this.state.activeMatch.match}
                                 user={this.state.activeMatch.user}
                                 onClose={this.closeMatchPanel}
+                                onDiscard={this.showDiscardMatchPopuot}
                             />
                         )}
                     </Panel>

@@ -39,3 +39,20 @@ export async function getMatches(userId) {
     return response.json();
     // return Promise.resolve(animals);
 }
+
+export async function discardMatch(animalId, userId) {
+    const request = new Request(getEndpointURL(`animals/like/reset/${animalId}`));
+    const response = await fetch(request, {
+        method: 'POST',
+        // headers: {
+        //     'Accept': 'application/json',
+        //     'Content-Type': 'application/json'
+        // },
+        // body: JSON.stringify({
+        //     id: animalId,
+        //     user_id: userId
+        // })
+    });
+    return response;
+    // return Promise.resolve(animals);
+}

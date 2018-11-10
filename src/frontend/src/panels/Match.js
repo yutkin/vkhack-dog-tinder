@@ -15,7 +15,8 @@ export default class Matches extends React.Component {
     static propTypes = {
         match: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
-        onClose: PropTypes.func.isRequired
+        onClose: PropTypes.func.isRequired,
+        onDiscard: PropTypes.func.isRequired
     }
 
     render() {
@@ -83,7 +84,11 @@ export default class Matches extends React.Component {
                 </Group>
 
                 <Group title="Действия">
-                    <CellButton level="danger">Отменить встречу</CellButton>
+                    <CellButton
+                        level="danger"
+                        onClick={() => this.props.onDiscard()}>
+                        Отказаться от встречи
+                    </CellButton>
                 </Group>
             </React.Fragment>
         );
