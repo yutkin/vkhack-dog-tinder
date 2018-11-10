@@ -24,7 +24,7 @@ def notify_user(user_id, msg):
         timeout=5,
     )
     resp.raise_for_status()
-    logger.debug("MESSAGE SENT")
+    logger.debug(f"MESSAGE SENT {resp.text}")
 
 
 @api_view(["POST"])
