@@ -3,8 +3,6 @@ version: "3"
 services:
   django:
     build: ./src/backend/
-    ports:
-      - 8080:8080
     tty: true
     networks:
       - frontend

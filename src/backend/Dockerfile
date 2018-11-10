@@ -1,8 +1,10 @@
 FROM python:3.7
 
-ADD . /app
+ADD requirements.txt /app/requirements.txt
 
 RUN pip install -U pip && pip install -r /app/requirements.txt
+
+ADD . /app
 
 WORKDIR /app
 
