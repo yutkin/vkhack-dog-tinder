@@ -6,9 +6,6 @@ import { getAnimals } from '../api/snek';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import './Discover.css';
-import pyosJpg from '../img/pyos.jpg';
-
-const data = ['Alexandre', 'Thomas', 'Lucien']
 
 export default class Discover extends React.Component {
     constructor(props) {
@@ -50,7 +47,7 @@ export default class Discover extends React.Component {
                         onEnd={() => console.log('end')}
                         size={[this.state.width, this.state.height]}
                         cardSize={[this.state.width * 0.93, this.state.height * 0.86]}>
-                        {data.map((item) =>
+                        {/* {data.map((item) =>
                             <Card
                                 key={item}
                                 onSwipeLeft={() => console.log('swipe left')}
@@ -69,7 +66,29 @@ export default class Discover extends React.Component {
                                     </div>
                                 </div>
                             </Card>
-                        )}
+                        )} */}
+                        {this.state.animals.map(({id, name, description, photo}) => (
+                            <Card
+                                key={id}
+                                onSwipeLeft={() => console.log('swipe left')}
+                                onSwipeRight={() => console.log('swipe right')}>
+                                <div className="tinder-card">
+                                    <div className="tinder-card-bg" style={{
+                                        backgroundImage: `url('${photo}')`
+                                    }}></div>
+                                    <div className="tinder-card-summary">
+                                        <div className="tinder-card-summary-inner">
+                                            <h2 className="tinder-card-name">
+                                                {name}
+                                            </h2>
+                                            <div className="tinder-card-descr">
+                                                {description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
                     </Cards>
                 </div>
             </React.Fragment>

@@ -96,4 +96,11 @@
 .tinder-card-descr {
     font-size: 18px;
     color: #FFFFFF;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* autoprefixer: off */
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
 }
