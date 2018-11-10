@@ -77,9 +77,6 @@ def animal_reset_likes_detail(request, pk):
 
 @api_view(["GET", "POST"])
 def animal_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == "POST":
         data = JSONParser().parse(request)
 
@@ -111,9 +108,6 @@ def animal_list(request):
 
 @csrf_exempt
 def animal_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         snippet = Animal.objects.get(pk=pk)
     except Animal.DoesNotExist:
