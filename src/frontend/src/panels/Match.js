@@ -5,6 +5,8 @@ import { PanelHeader, Group, Div, Avatar, Cell, Button, platform, IOS, HeaderBut
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
 
+import { Map, Placemark } from 'react-yandex-maps';
+
 import './Match.css';
 
 const osname = platform();
@@ -41,9 +43,24 @@ export default class Matches extends React.Component {
                 </Group>
 
                 <Group title="На карте">
-                    <div className="match-map"></div>
+                    <div className="match-map">
+                        <Map
+                            defaultState={{ center: [match.lat, match.lon], zoom: 12 }}
+                            width="100%"
+                            height={300}
+                        >
+                            <Placemark geometry={[match.lat, match.lon]} />
+                        </Map>
+                    </div>
                     <Cell>
-                        <Button size="xl" level="secondary">Проложить маршрут</Button>
+                        <Button
+                            size="xl"
+                            level="secondary"
+                            component="a"
+                            href={`https://yandex.ru/maps/?z=12&ll=${match.lon},${match.lat}&l=map&rtext=~${match.lat},${match.lon}`}
+                            target="_blank">
+                            Проложить маршрут
+                        </Button>
                     </Cell>
                 </Group>
 

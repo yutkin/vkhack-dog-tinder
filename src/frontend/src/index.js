@@ -6,10 +6,12 @@ import connect from '@vkontakte/vkui-connect';
 import App from './App';
 // import registerServiceWorker from './sw';
 
+import { YMaps } from 'react-yandex-maps';
+
 // Init VK App
 connect.send('VKWebAppInit', {});
 
 // Service Worker For Cache
 // registerServiceWorker();
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<YMaps><App /></YMaps>, document.getElementById('root'));
