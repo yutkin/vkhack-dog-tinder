@@ -4,11 +4,11 @@ ADD requirements.txt /app/requirements.txt
 
 RUN pip install -U pip && pip install -r /app/requirements.txt
 
-ADD . /app
+ADD ./vkhack/ /app/
 
 WORKDIR /app
 
-RUN python manage.py collectstatic
+# RUN python manage.py collectstatic
 
 EXPOSE 8080
 

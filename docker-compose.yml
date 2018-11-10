@@ -4,6 +4,8 @@ services:
   django:
     build: ./src/backend/
     tty: true
+    ports:
+      - 8080:8080
     networks:
       - frontend
     volumes:
