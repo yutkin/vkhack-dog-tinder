@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { PanelHeader, List, Cell, Avatar } from '@vkontakte/vkui';
 import connect from '@vkontakte/vkui-connect';
 import VKConnect, { response as res } from '@vkontakte/vkui-connect-mock';
@@ -13,8 +14,7 @@ res.VKWebAppCallAPIMethod.data = {
         response: usersStub
     }
 };
-
-const currentUserId = 23878107;
+console.log(res);
 
 export default class Matches extends React.Component {
     constructor(props) {
@@ -25,6 +25,11 @@ export default class Matches extends React.Component {
             usersById: null
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
+    }
+
+    static propTypes = {
+        currentUser: PropTypes.object.isRequired,
+        accessToken: PropTypes.string.isRequired
     }
 
     componentWillMount() {
@@ -49,12 +54,12 @@ export default class Matches extends React.Component {
     }
 
     async fetchMatchesAndUsers() {
-        const matches = await getMatches(currentUserId);
+        const matches = await getMatches(this.props.currentUser.id);
         this.setState({ matches });
 
         const userIds = matches.reduce((acc, {liked_by_one: firstUserId, liked_by_two: secondUserId}) => {
             let userId;
-            if (firstUserId !== currentUserId) {
+            if (firstUserId !== this.props.currentUser.id) {
                 userId = firstUserId;
             } else {
                 userId = secondUserId;
@@ -70,7 +75,7 @@ export default class Matches extends React.Component {
                 'user_ids': userIds.join(','),
                 'fields': 'photo_100',
                 'v': '5.87',
-                'access_token': 'your_token'
+                'access_token': this.props.accessToken
             }
         });
     }
@@ -82,7 +87,7 @@ export default class Matches extends React.Component {
                 <List>
                     {this.state.usersById && this.state.matches.map((match) => {
                         let userId;
-                        if (match.liked_by_one !== currentUserId) {
+                        if (match.liked_by_one !== this.props.currentUser.id) {
                             userId = match.liked_by_one;
                         } else {
                             userId = match.liked_by_two;

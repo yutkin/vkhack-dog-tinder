@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { PanelHeader } from '@vkontakte/vkui';
 
 import Cards, { Card } from 'react-swipe-deck';
@@ -24,12 +25,17 @@ export default class Discover extends React.Component {
         this.handleStackEnd = this.handleStackEnd.bind(this);
     }
 
+    static propTypes = {
+        currentUser: PropTypes.object.isRequired,
+        accessToken: PropTypes.string.isRequired
+    }
+
     componentWillMount() {
         this.fetchAnimals();
     }
 
     async fetchAnimals() {
-        const animals = await getAnimals(23878107);
+        const animals = await getAnimals(this.props.currentUser.id);
         this.setState({ animals });
     }
 
@@ -38,7 +44,7 @@ export default class Discover extends React.Component {
     }
 
     async handleSwipeRight(animalId) {
-        likeAnimal(animalId, 23878107);
+        likeAnimal(animalId, this.props.currentUser.id);
     }
 
     handleStackEnd() {
