@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0010_auto_20181111_0134'),
-    ]
+    dependencies = [("ray", "0010_auto_20181111_0134")]
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='persons_applied',
+            model_name="task",
+            name="persons_applied",
             field=models.IntegerField(default=0),
-        ),
+        )
     ]

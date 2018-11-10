@@ -19,9 +19,7 @@ VK_APP_KEY = "916168e8916168e8916168e89e91079bd199161916168e8ca84da8c20213fddf8e
 def notify_user(user_id, msg):
     params = dict(user_ids=user_id, message=msg, access_token=VK_APP_KEY, v=5.52)
     resp = requests.get(
-        f"https://api.vk.com/method/notifications.sendMessage",
-        params=params,
-        timeout=5,
+        f"https://api.vk.com/method/notifications.sendMessage", params=params, timeout=5
     )
     resp.raise_for_status()
     logger.debug(f"MESSAGE SENT {resp.text}")
@@ -32,12 +30,12 @@ def animal_like(request):
 
     data = JSONParser().parse(request)
 
-    animal = Animal.objects.get(pk=data.get("id"))
+    try:
+        animal = Animal.objects.get(pk=data.get("id"))
+    except Animal.DoesNotExist:
+        return HttpResponse(status=404)
 
     user_id = data.get("user_id")
-
-    if not animal:
-        return HttpResponse(status=404)
 
     if animal.liked_by_one and animal.liked_by_two:
         return HttpResponse(status=200)
@@ -53,7 +51,7 @@ def animal_like(request):
 
     try:
         notify_user(user_id, msg)
-    except Exception:
+    except requests.HTTPError:
         logger.error(f"Cannot send notification", exc_info=True)
 
     return HttpResponse(status=200)
@@ -65,11 +63,22 @@ def animal_reset_likes(request):
     return HttpResponse(status=200)
 
 
+@api_view(["POST"])
+def animal_reset_likes_detail(request, pk):
+    try:
+        an = Animal.objects.get(pk=pk)
+    except Animal.DoesNotExist:
+        return HttpResponse(status=404)
+
+    an.liked_by_one = None
+    an.liked_by_two = None
+    an.save()
+
+    return HttpResponse(status=200)
+
+
 @api_view(["GET", "POST"])
 def animal_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == "POST":
         data = JSONParser().parse(request)
 
@@ -77,7 +86,6 @@ def animal_list(request):
 
         if serializer.is_valid():
             serializer.save()
-
             return JsonResponse(serializer.data, status=201)
 
         return JsonResponse(serializer.errors, status=400)
@@ -88,8 +96,9 @@ def animal_list(request):
 
         if user_id:
             animals = Animal.objects.filter(
-                ~Q(liked_by_one=user_id) & ~Q(liked_by_two=user_id) &
-                (Q(liked_by_one=None) | Q(liked_by_two=None))
+                ~Q(liked_by_one=user_id)
+                & ~Q(liked_by_two=user_id)
+                & (Q(liked_by_one=None) | Q(liked_by_two=None))
             )[:limit]
         else:
             animals = Animal.objects.all()[:limit]
@@ -100,19 +109,16 @@ def animal_list(request):
 
 @csrf_exempt
 def animal_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
     try:
         snippet = Animal.objects.get(pk=pk)
     except Animal.DoesNotExist:
         return HttpResponse(status=404)
 
-    if request.method == 'GET':
+    if request.method == "GET":
         serializer = AnimalSerializer(snippet)
         return JsonResponse(serializer.data)
 
-    elif request.method == 'PUT':
+    elif request.method == "PUT":
         data = JSONParser().parse(request)
         serializer = AnimalSerializer(snippet, data=data)
         if serializer.is_valid():
@@ -125,8 +131,8 @@ def animal_detail(request, pk):
 def users_matched(request, uid):
 
     animals = Animal.objects.filter(
-        (~Q(liked_by_one=None) & ~Q(liked_by_two=None)) &
-        (Q(liked_by_one=uid) | Q(liked_by_two=uid))
+        (~Q(liked_by_one=None) & ~Q(liked_by_two=None))
+        & (Q(liked_by_one=uid) | Q(liked_by_two=uid))
     )[:15]
 
     serializer = AnimalSerializer(animals, many=True)
@@ -136,9 +142,6 @@ def users_matched(request, uid):
 
 @api_view(["GET", "POST"])
 def task_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == "POST":
         data = JSONParser().parse(request)
 
@@ -160,18 +163,17 @@ def task_list(request):
 
 @api_view(["POST"])
 def task_apply(request, pk):
-    """
-    List all code snippets, or create a new snippet.
-    """
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return HttpResponse(status=404)
 
-    # data = JSONParser().parse(request)
+    new_val = task.persons_applied + 1
 
-    task = Task.objects.get(pk=pk)
-
-    if not task:
+    if new_val > task.persons_needed:
         return HttpResponse(status=400)
 
-    task.persons_applied = min(task.persons_needed, task.persons_applied + 1)
+    task.persons_applied = new_val
     task.save()
 
     return HttpResponse(status=200)

@@ -5,34 +5,38 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0002_animal_type'),
-    ]
+    dependencies = [("ray", "0002_animal_type")]
 
     operations = [
         migrations.CreateModel(
-            name='Task',
+            name="Task",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('name', models.CharField(max_length=128)),
-                ('description', models.TextField()),
-                ('time_of_start', models.DateTimeField()),
-                ('photo', models.TextField(editable=False)),
-                ('owner', models.TextField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                ("name", models.CharField(max_length=128)),
+                ("description", models.TextField()),
+                ("time_of_start", models.DateTimeField()),
+                ("photo", models.TextField(editable=False)),
+                ("owner", models.TextField()),
             ],
-            options={
-                'ordering': ('created',),
-            },
+            options={"ordering": ("created",)},
         ),
         migrations.AddField(
-            model_name='animal',
-            name='liked_by_one',
+            model_name="animal",
+            name="liked_by_one",
             field=models.IntegerField(null=True),
         ),
         migrations.AddField(
-            model_name='animal',
-            name='lined_by_two',
+            model_name="animal",
+            name="lined_by_two",
             field=models.IntegerField(null=True),
         ),
     ]

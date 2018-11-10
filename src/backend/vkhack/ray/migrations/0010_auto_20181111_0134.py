@@ -5,18 +5,11 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0009_auto_20181111_0124'),
-    ]
+    dependencies = [("ray", "0009_auto_20181111_0124")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='task',
-            name='photo',
-        ),
+        migrations.RemoveField(model_name="task", name="photo"),
         migrations.AlterField(
-            model_name='task',
-            name='owner',
-            field=models.IntegerField(),
+            model_name="task", name="owner", field=models.IntegerField()
         ),
     ]

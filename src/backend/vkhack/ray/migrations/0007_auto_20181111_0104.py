@@ -5,48 +5,40 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0006_auto_20181110_2349'),
-    ]
+    dependencies = [("ray", "0006_auto_20181110_2349")]
 
     operations = [
         migrations.RenameField(
-            model_name='task',
-            old_name='time_of_start',
-            new_name='start_date',
+            model_name="task", old_name="time_of_start", new_name="start_date"
         ),
         migrations.AddField(
-            model_name='task',
-            name='lat',
+            model_name="task",
+            name="lat",
             field=models.FloatField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='lon',
+            model_name="task",
+            name="lon",
             field=models.FloatField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='persons_needed',
+            model_name="task",
+            name="persons_needed",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='type',
+            model_name="task",
+            name="type",
             field=models.CharField(default=1, max_length=128),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='animal',
-            name='description',
-            field=models.TextField(),
+            model_name="animal", name="description", field=models.TextField()
         ),
         migrations.AlterField(
-            model_name='task',
-            name='photo',
-            field=models.TextField(),
+            model_name="task", name="photo", field=models.TextField()
         ),
     ]

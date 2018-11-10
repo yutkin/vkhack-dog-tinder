@@ -5,15 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('ray', '0001_initial'),
-    ]
+    dependencies = [("ray", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='animal',
-            name='type',
-            field=models.CharField(default='', max_length=128),
+            model_name="animal",
+            name="type",
+            field=models.CharField(default="", max_length=128),
             preserve_default=False,
-        ),
+        )
     ]
