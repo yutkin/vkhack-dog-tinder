@@ -1,9 +1,7 @@
 import React from 'react';
 import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader } from '@vkontakte/vkui';
-import Icon28Newsfeed from '@vkontakte/icons/dist/28/newsfeed';
-import Icon28Search from '@vkontakte/icons/dist/28/search';
-import Icon28Message from '@vkontakte/icons/dist/28/message';
-import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
+import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
+import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
 import '@vkontakte/vkui/dist/vkui.css';
 
@@ -12,7 +10,7 @@ class App extends React.Component {
         super(props);
     
         this.state = {
-            activeStory: 'more'
+            activeStory: 'discover'
         };
         this.onStoryChange = this.onStoryChange.bind(this);
     }
@@ -27,35 +25,25 @@ class App extends React.Component {
                 <Tabbar>
                     <TabbarItem
                         onClick={this.onStoryChange}
-                        selected={this.state.activeStory === 'feed'}
-                        data-story="feed"
-                    ><Icon28Newsfeed /></TabbarItem>
+                        selected={this.state.activeStory === 'matches'}
+                        data-story="matches"
+                        label="&nbsp;"
+                    ><Icon28Favorite /></TabbarItem>
                     <TabbarItem
                         onClick={this.onStoryChange}
                         selected={this.state.activeStory === 'discover'}
                         data-story="discover"
-                    ><Icon28Search /></TabbarItem>
+                    ><Icon28Place /></TabbarItem>
                     <TabbarItem
                         onClick={this.onStoryChange}
-                        selected={this.state.activeStory === 'messages'}
-                        data-story="messages"
-                        label="12"
-                    ><Icon28Message /></TabbarItem>
-                    <TabbarItem
-                        onClick={this.onStoryChange}
-                        selected={this.state.activeStory === 'notifications'}
-                        data-story="notifications"
-                    ><Icon28Notifications /></TabbarItem>
-                    <TabbarItem
-                        onClick={this.onStoryChange}
-                        selected={this.state.activeStory === 'more'}
-                        data-story="more"
+                        selected={this.state.activeStory === 'tasks'}
+                        data-story="tasks"
                     ><Icon28More /></TabbarItem>
                 </Tabbar>
             }>
-                <View id="feed" activePanel="feed">
-                    <Panel id="feed">
-                        <PanelHeader>Feed</PanelHeader>
+                <View id="matches" activePanel="matches">
+                    <Panel id="matches">
+                        <PanelHeader>Matches</PanelHeader>
                     </Panel>
                 </View>
                 <View id="discover" activePanel="discover">
@@ -63,19 +51,9 @@ class App extends React.Component {
                         <PanelHeader>Discover</PanelHeader>
                     </Panel>
                 </View>
-                <View id="messages" activePanel="messages">
-                    <Panel id="messages">
-                        <PanelHeader>Messages</PanelHeader>
-                    </Panel>
-                </View>
-                <View id="notifications" activePanel="notifications">
-                    <Panel id="notifications">
-                        <PanelHeader>Notifications</PanelHeader>
-                    </Panel>
-                </View>
-                <View id="more" activePanel="more">
-                    <Panel id="more">
-                        <PanelHeader>More</PanelHeader>
+                <View id="tasks" activePanel="tasks">
+                    <Panel id="tasks">
+                        <PanelHeader>Tasks</PanelHeader>
                     </Panel>
                 </View>
             </Epic>
