@@ -47,26 +47,6 @@ export default class Discover extends React.Component {
                         onEnd={() => console.log('end')}
                         size={[this.state.width, this.state.height]}
                         cardSize={[this.state.width * 0.93, this.state.height * 0.86]}>
-                        {/* {data.map((item) =>
-                            <Card
-                                key={item}
-                                onSwipeLeft={() => console.log('swipe left')}
-                                onSwipeRight={() => console.log('swipe right')}>
-                                <div className="tinder-card">
-                                    <div className="tinder-card-bg" style={{
-                                        backgroundImage: `url('${pyosJpg}')`
-                                    }}></div>
-                                    <div className="tinder-card-summary">
-                                        <div className="tinder-card-summary-inner">
-                                            <h2 className="tinder-card-name">Ray</h2>
-                                            <div className="tinder-card-descr">
-                                                Необыкновенно человеко-ориентированная собака, очень любящая детей. Ей нравятся долгие прогулки с человеком, она всегда идет рядом, не тянет. 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        )} */}
                         {this.state.animals.map(({id, name, description, photo}) => (
                             <Card
                                 key={id}
