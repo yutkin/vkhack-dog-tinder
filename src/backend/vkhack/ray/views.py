@@ -65,10 +65,10 @@ def animal_reset_likes(request):
 
 @api_view(["POST"])
 def animal_reset_likes_detail(request, pk):
-    an = Animal.objects.get(pk=pk)
-
-    if not an:
-        return HttpResponse(status=400)
+    try:
+        an = Animal.objects.get(pk=pk)
+    except Animal.DoesNotExist:
+        return HttpResponse(status=404)
 
     an.liked_by_one = None
     an.liked_by_two = None
@@ -143,9 +143,6 @@ def users_matched(request, uid):
 
 @api_view(["GET", "POST"])
 def task_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == "POST":
         data = JSONParser().parse(request)
 
@@ -167,14 +164,10 @@ def task_list(request):
 
 @api_view(["POST"])
 def task_apply(request, pk):
-    """
-    List all code snippets, or create a new snippet.
-    """
-
-    task = Task.objects.get(pk=pk)
-
-    if not task:
-        return HttpResponse(status=400)
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return HttpResponse(status=404)
 
     new_val = task.persons_applied + 1
 
