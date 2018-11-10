@@ -54,20 +54,14 @@ def animal_like(request):
     try:
         notify_user(user_id, msg)
     except Exception:
-        logger.error(f"Cannot send message", exc_info=True)
+        logger.error(f"Cannot send notification", exc_info=True)
 
     return HttpResponse(status=200)
 
 
 @api_view(["POST"])
 def animal_reset_likes(request):
-    animals = Animal.objects.all().update(liked_by_one=None, liked_by_two=None)
-
-    # for animal in animals:
-    #     animal.liked_by_one = None
-    #     animal.liked_by_two = None
-    #     animal.save(update_fields=["liked_by_one", "liked_by_two"])
-
+    Animal.objects.all().update(liked_by_one=None, liked_by_two=None)
     return HttpResponse(status=200)
 
 
@@ -133,7 +127,7 @@ def users_matched(request, uid):
     animals = Animal.objects.filter(
         (~Q(liked_by_one=None) & ~Q(liked_by_two=None)) &
         (Q(liked_by_one=uid) | Q(liked_by_two=uid))
-    )
+    )[:15]
 
     serializer = AnimalSerializer(animals, many=True)
 
