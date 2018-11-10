@@ -3,6 +3,7 @@ FROM nginx:latest
 ARG CERT_PATH=/etc/letsencrypt/live/snek-gc.misha.im
 
 ADD nginx.conf /etc/nginx/nginx.conf
+ADD ssl.conf /etc/nginx/ssl.conf
 
 
 ADD fullchain.pem $CERT_PATH/fullchain.pem
