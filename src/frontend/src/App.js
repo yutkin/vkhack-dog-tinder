@@ -3,6 +3,9 @@ import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader } from '@vkontakte/v
 import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
 import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
+
+import Discover from './panels/Discover';
+
 import '@vkontakte/vkui/dist/vkui.css';
 
 class App extends React.Component {
@@ -48,7 +51,7 @@ class App extends React.Component {
                 </View>
                 <View id="discover" activePanel="discover">
                     <Panel id="discover">
-                        <PanelHeader>Discover</PanelHeader>
+                        <Discover />
                     </Panel>
                 </View>
                 <View id="tasks" activePanel="tasks">
