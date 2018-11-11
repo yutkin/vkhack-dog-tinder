@@ -95,15 +95,31 @@ def animal_list(request):
         limit = int(request.GET.get("limit", 15))
 
         if user_id:
+            liked_by_me = Animal.objects.filter(
+                Q(liked_by_one=user_id) | Q(liked_by_two=user_id)
+            )
+
+            matched_with_me = []
+
+            for a in liked_by_me:
+                if a.liked_by_one == user_id:
+                    matched_with_me.append(a.liked_by_two)
+                else:
+                    matched_with_me.append(a.liked_by_one)
+
             animals = Animal.objects.filter(
                 ~Q(liked_by_one=user_id)
                 & ~Q(liked_by_two=user_id)
                 & (Q(liked_by_one=None) | Q(liked_by_two=None))
-            )[:limit]
-        else:
-            animals = Animal.objects.all()[:limit]
+            ).filter(
+                ~Q(liked_by_one__in=matched_with_me)
+                & ~Q(liked_by_two__in=matched_with_me)
+            )
 
-        serializer = AnimalSerializer(animals, many=True)
+        else:
+            animals = Animal.objects.all()
+
+        serializer = AnimalSerializer(animals[:limit], many=True)
         return JsonResponse(serializer.data, safe=False)
 
 
