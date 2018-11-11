@@ -11,6 +11,9 @@ import { takeTask } from '../api/snek';
 
 import './Task.css';
 
+import connect from '@vkontakte/vkui-connect';
+// import connect from '@vkontakte/vkui-connect-mock';
+
 const osname = platform();
 
 export default class Task extends React.Component {
@@ -20,9 +23,11 @@ export default class Task extends React.Component {
         this.state = {
             taken: this.props.task.persons_applied.includes(
                 String(this.props.currentUser.id)
-            )
+            ),
+            taskContactUser: null
         };
         this.onTakeTask = this.onTakeTask.bind(this);
+        this.handleConnectEvent = this.handleConnectEvent.bind(this);
     }
 
     static propTypes = {
@@ -31,6 +36,32 @@ export default class Task extends React.Component {
         onClose: PropTypes.func.isRequired,
         onComplete: PropTypes.func.isRequired,
         onDiscard: PropTypes.func.isRequired,
+        accessToken: PropTypes.string.isRequired,
+    }
+
+    componentWillMount() {
+        connect.subscribe(this.handleConnectEvent);
+        connect.send('VKWebAppCallAPIMethod', {
+            'method': 'users.get',
+            'params': {
+                'user_ids': [this.props.task.owner],
+                'fields': 'photo_100',
+                'v': '5.87',
+                'access_token': this.props.accessToken
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        connect.unsubscribe(this.handleConnectEvent);
+    }
+
+    handleConnectEvent(e) {
+        if (e.detail.type === 'VKWebAppCallAPIMethodResult') {
+            this.setState({
+                taskContactUser: e.detail.data.response[0]
+            })
+        }
     }
 
     async onTakeTask() {
@@ -41,6 +72,8 @@ export default class Task extends React.Component {
 
     render() {
         const { task, currentUser } = this.props;
+
+        const {taskContactUser} = this.state;
         return (
             <React.Fragment>
                 <PanelHeader
@@ -59,6 +92,24 @@ export default class Task extends React.Component {
                             {task.description}
                         </InfoRow>
                     </Div>
+                </Group>
+
+                <Group title="Ответственный">
+                    <Cell
+                        before={
+                            <Avatar src={taskContactUser.photo_100} />
+                        }>
+                        {`${taskContactUser.first_name} ${taskContactUser.last_name}`}
+                    </Cell>
+                    <Cell>
+                        <Button
+                            size="xl"
+                            level="primary"
+                            component="a"
+                            href={`https://vk.me/id${taskContactUser.id}`}>
+                            Написать сообщение
+                        </Button>
+                    </Cell>
                 </Group>
 
                 <Group>

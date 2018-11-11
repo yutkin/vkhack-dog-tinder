@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PanelHeader, List, Cell, Avatar } from '@vkontakte/vkui';
-import connect from '@vkontakte/vkui-connect';
-// import connect, { response as res } from '@vkontakte/vkui-connect-mock';
 
 import { getMatches } from '../api/snek';
 import usersStub from '../api/stub_users.json';
 
+import connect from '@vkontakte/vkui-connect';
+// import connect, { response as res } from '@vkontakte/vkui-connect-mock';
 // res.VKWebAppCallAPIMethod.data = {
 //     type: 'VKWebAppCallAPIMethodResult',
 //     data: {
