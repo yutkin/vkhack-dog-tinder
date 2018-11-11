@@ -92,7 +92,7 @@ export default class Matches extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <PanelHeader>Matches</PanelHeader>
+                <PanelHeader>Пары</PanelHeader>
                 <List>
                     {this.state.usersById && this.state.matches.map((match) => {
                         let userId;

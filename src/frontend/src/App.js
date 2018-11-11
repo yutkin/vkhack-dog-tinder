@@ -28,6 +28,7 @@ class App extends React.Component {
             currentUser: null,
             accessToken: null,
             activeMatch: null,
+            geoData: null,
             showDiscardMatchPopout: false
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
@@ -41,6 +42,7 @@ class App extends React.Component {
         connect.subscribe(this.handleConnectEvent);
         connect.send('VKWebAppGetUserInfo', {});
         connect.send('VKWebAppGetAuthToken', {'app_id': APP_ID, 'scope': 'notify'});
+        connect.send("VKWebAppGetGeodata", {});
     }
 
     handleConnectEvent(e) {
@@ -51,6 +53,8 @@ class App extends React.Component {
             this.setState({ currentUser: e.detail.data });
         } else if (e.detail.type === 'VKWebAppAccessTokenReceived') {
             this.setState({ accessToken: e.detail.data.access_token });
+        } else if (e.detail.type === 'VKWebAppGeodataResult') {
+            this.setState({ geoData: e.detail.data });
         }
     }
   
@@ -143,7 +147,7 @@ class App extends React.Component {
                 </View>
                 <View id="tasks" activePanel="tasks">
                     <Panel id="tasks">
-                        <PanelHeader>Tasks</PanelHeader>
+                        <PanelHeader>Задачи</PanelHeader>
                     </Panel>
                 </View>
             </Epic>
