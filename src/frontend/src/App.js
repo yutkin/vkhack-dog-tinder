@@ -9,6 +9,7 @@ import connect from '@vkontakte/vkui-connect';
 import Discover from './panels/Discover';
 import Matches from './panels/Matches';
 import Match from './panels/Match';
+import Tasks from './panels/Tasks';
 
 import { discardMatch } from './api/snek';
 
@@ -147,7 +148,7 @@ class App extends React.Component {
                 </View>
                 <View id="tasks" activePanel="tasks">
                     <Panel id="tasks">
-                        <PanelHeader>Задачи</PanelHeader>
+                        <Tasks />
                     </Panel>
                 </View>
             </Epic>

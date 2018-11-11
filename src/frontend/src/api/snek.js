@@ -56,3 +56,11 @@ export async function discardMatch(animalId, userId) {
     return response;
     // return Promise.resolve(animals);
 }
+
+export async function getTasks() {
+    const request = new Request(getEndpointURL(`tasks`));
+    const response = await fetch(request, {
+        method: 'GET'
+    });
+    return response.json();
+}
