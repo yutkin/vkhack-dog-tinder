@@ -176,7 +176,9 @@ def task_apply(request, pk):
     data = JSONParser().parse(request)
     user_id = str(data.get("user_id"))
 
-    task.persons_applied = ",".join(task.persons_applied.split(",") + [user_id])
+    arr = task.persons_applied.split(",") + [user_id]
+
+    task.persons_applied = ",".join(set(arr))
     task.save()
 
     return HttpResponse(status=200)
@@ -191,6 +193,12 @@ def task_done(request, pk):
 
     data = JSONParser().parse(request)
     user_id = str(data.get("user_id"))
+
+    lat = data.get("lat")
+    lon = data.get("lon")
+
+    # if lat and lon:
+    #     calc_dist(task.lat, task.lon, )
 
     applied = task.persons_applied.split(",")
     task.persons_applied = ",".join([item for item in applied if item != user_id])
