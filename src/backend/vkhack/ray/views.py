@@ -158,11 +158,32 @@ def task_list(request):
         task = Task.objects.all()
 
         serializer = TaskSerializer(task, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        data = serializer.data
+        for item in data:
+            item["persons_applied"] = item["persons_applied"].split(",")
+            item["persons_applied"] = [i for i in item["persons_applied"] if i != "0"]
+
+        return JsonResponse(data, safe=False)
 
 
 @api_view(["POST"])
 def task_apply(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return HttpResponse(status=404)
+
+    data = JSONParser().parse(request)
+    user_id = str(data.get("user_id"))
+
+    task.persons_applied = ",".join(task.persons_applied.split(",") + [user_id])
+    task.save()
+
+    return HttpResponse(status=200)
+
+
+@api_view(["POST"])
+def task_done(request, pk):
     try:
         task = Task.objects.get(pk=pk)
     except Task.DoesNotExist:
