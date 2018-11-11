@@ -186,9 +186,6 @@ def task_apply(request, pk):
     return HttpResponse(status=200)
 
 
-def calc_dist(x1, y1, x2, y2):
-
-
 
 @api_view(["POST"])
 def task_done(request, pk):
