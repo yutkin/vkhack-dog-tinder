@@ -27,7 +27,7 @@ export default class Task extends React.Component {
             taskContactUser: null
         };
         this.onTakeTask = this.onTakeTask.bind(this);
-        this.handleConnectEvent = this.handleConnectEvent.bind(this);
+        // this.handleConnectEvent = this.handleConnectEvent.bind(this);
     }
 
     static propTypes = {
@@ -39,30 +39,30 @@ export default class Task extends React.Component {
         accessToken: PropTypes.string.isRequired,
     }
 
-    componentWillMount() {
-        connect.subscribe(this.handleConnectEvent);
-        connect.send('VKWebAppCallAPIMethod', {
-            'method': 'users.get',
-            'params': {
-                'user_ids': [this.props.task.owner],
-                'fields': 'photo_100',
-                'v': '5.87',
-                'access_token': this.props.accessToken
-            }
-        });
-    }
+    // componentWillMount() {
+    //     connect.subscribe(this.handleConnectEvent);
+    //     connect.send('VKWebAppCallAPIMethod', {
+    //         'method': 'users.get',
+    //         'params': {
+    //             'user_ids': [this.props.task.owner],
+    //             'fields': 'photo_100',
+    //             'v': '5.87',
+    //             'access_token': this.props.accessToken
+    //         }
+    //     });
+    // }
 
-    componentWillUnmount() {
-        connect.unsubscribe(this.handleConnectEvent);
-    }
+    // componentWillUnmount() {
+    //     connect.unsubscribe(this.handleConnectEvent);
+    // }
 
-    handleConnectEvent(e) {
-        if (e.detail.type === 'VKWebAppCallAPIMethodResult') {
-            this.setState({
-                taskContactUser: e.detail.data.response[0]
-            })
-        }
-    }
+    // handleConnectEvent(e) {
+    //     if (e.detail.type === 'VKWebAppCallAPIMethodResult') {
+    //         this.setState({
+    //             taskContactUser: e.detail.data.response[0]
+    //         })
+    //     }
+    // }
 
     async onTakeTask() {
         this.setState({ taken: true });
@@ -73,7 +73,7 @@ export default class Task extends React.Component {
     render() {
         const { task, currentUser } = this.props;
 
-        const {taskContactUser} = this.state;
+        // const {taskContactUser} = this.state;
         return (
             <React.Fragment>
                 <PanelHeader
@@ -94,7 +94,7 @@ export default class Task extends React.Component {
                     </Div>
                 </Group>
 
-                <Group title="Ответственный">
+                {/* <Group title="Ответственный">
                     <Cell
                         before={
                             <Avatar src={taskContactUser.photo_100} />
@@ -110,7 +110,7 @@ export default class Task extends React.Component {
                             Написать сообщение
                         </Button>
                     </Cell>
-                </Group>
+                </Group> */}
 
                 <Group>
                     <div className="match-map">
