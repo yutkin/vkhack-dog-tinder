@@ -68,7 +68,7 @@ export default class Discover extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <PanelHeader>Discover</PanelHeader>
+                <PanelHeader>Лента</PanelHeader>
 
                 <div ref={this.handleTinderRef} className="tinder-container">
                     <Cards

@@ -3,8 +3,8 @@ import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader, platform, IOS, Acti
 import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
 import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
-// import connect from '@vkontakte/vkui-connect';
-import connect from '@vkontakte/vkui-connect-mock';
+import connect from '@vkontakte/vkui-connect';
+// import connect from '@vkontakte/vkui-connect-mock';
 
 import Discover from './panels/Discover';
 import Matches from './panels/Matches';
@@ -161,7 +161,7 @@ class App extends React.Component {
                         onClick={this.onStoryChange}
                         selected={this.state.activeStory === 'matches'}
                         data-story="matches"
-                        label="&nbsp;"
+                        // label="&nbsp;"
                     ><Icon28Favorite /></TabbarItem>
                     <TabbarItem
                         onClick={this.onStoryChange}
@@ -209,7 +209,9 @@ class App extends React.Component {
                     activePanel={this.state.activeTask ? 'task' : 'tasks'}
                     popout={tasksViewPopout}>
                     <Panel id="tasks">
-                        <Tasks onTaskSelect={this.openTaskPanel} />
+                        <Tasks
+                            onTaskSelect={this.openTaskPanel}
+                            currentUser={this.state.currentUser} />
                     </Panel>
 
                     <Panel id="task">

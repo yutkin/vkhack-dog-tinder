@@ -41,14 +41,56 @@ export default class Tasks extends React.Component {
     }
 
     render() {
-        const tasks = this.state.filter
+        let tasks = this.state.filter
             ? this.state.tasks.filter(({type}) => type === this.state.filter)
             : this.state.tasks;
+
+        const takenTasks = tasks.filter(({persons_applied: personsApplied}) => (
+            personsApplied.includes(String(this.props.currentUser.id))
+        ));
+
+        const otherTasks = tasks.filter(({persons_applied: personsApplied}) => (
+            !personsApplied.includes(String(this.props.currentUser.id))
+        ));
+
+        const takenTasksList = (
+            <List>
+                {takenTasks.map((task) => {
+                    return (
+                        <Cell
+                            key={task.id}
+                            before={<Icon24Work />}
+                            description={task.description}
+                            onClick={this.onTaskClick}
+                            data-task-id={task.id}>
+                            {task.title}
+                        </Cell>
+                    );
+                })}
+            </List>
+        );
+
+        const otherTasksList = (
+            <List>
+                {otherTasks.map((task) => {
+                    return (
+                        <Cell
+                            key={task.id}
+                            before={<Icon24Work />}
+                            description={task.description}
+                            onClick={this.onTaskClick}
+                            data-task-id={task.id}>
+                            {task.title}
+                        </Cell>
+                    );
+                })}
+            </List>
+        );
 
         return (
             <React.Fragment>
                 <PanelHeader>Задачи</PanelHeader>
-                <Group style={{ margin: 0 }}>
+                <Group style={{ marginTop: 0, marginBottom: takenTasks.length ? 'inherit' : 0 }}>
                     <Tabs theme="light">
                         <TabsItem
                             onClick={() => this.setState({ filter: null })}
@@ -67,20 +109,25 @@ export default class Tasks extends React.Component {
                         </TabsItem>
                     </Tabs>
                 </Group>
-                <List>
-                    {tasks.map((task) => {
-                        return (
-                            <Cell
-                                key={task.id}
-                                before={<Icon24Work />}
-                                description={task.description}
-                                onClick={this.onTaskClick}
-                                data-task-id={task.id}>
-                                {task.title}
-                            </Cell>
-                        );
-                    })}
-                </List>
+
+                {Boolean(takenTasks.length) && Boolean(otherTasks.length) && (
+                    <React.Fragment>
+                        <Group title="Мои задачи">
+                            {takenTasksList}
+                        </Group>
+                        <Group title="Все задачи">
+                            {otherTasksList}
+                        </Group>
+                    </React.Fragment>
+                )}
+
+                {Boolean(takenTasks.length) && !Boolean(otherTasks.length) && (
+                    <Group title="Мои задачи">
+                        {takenTasksList}
+                    </Group>
+                )}
+
+                {!Boolean(takenTasks.length) && Boolean(otherTasks.length) && otherTasksList}
             </React.Fragment>
         );
     }
