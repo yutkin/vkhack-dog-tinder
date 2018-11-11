@@ -75,7 +75,7 @@ export default class Discover extends React.Component {
                         onEnd={this.handleStackEnd}
                         size={[this.state.width, this.state.height]}
                         cardSize={[this.state.width * 0.93, this.state.height * 0.86]}>
-                        {this.state.animals.map(({id, name, description, photo}) => (
+                        {this.state.animals.map(({id, name, description, photo, type}) => (
                             <Card
                                 key={id}
                                 onSwipeLeft={this.handleSwipeLeft}
@@ -87,7 +87,10 @@ export default class Discover extends React.Component {
                                     <div className="tinder-card-summary">
                                         <div className="tinder-card-summary-inner">
                                             <h2 className="tinder-card-name">
-                                                {name}
+                                                <span className="tinder-card-real-name">{name}</span>
+                                                {type !== 'cat' && (
+                                                    <span className="tinder-card-breed">&nbsp;{type}</span>
+                                                )}
                                             </h2>
                                             <div className="tinder-card-descr">
                                                 {description}

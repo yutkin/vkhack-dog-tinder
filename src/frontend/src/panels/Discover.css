@@ -89,6 +89,14 @@
 }
 
 .tinder-card-name {
+    color: #d0d0d0;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tinder-card-real-name {
     font-size: 32px;
     color: #FFFFFF;
 }

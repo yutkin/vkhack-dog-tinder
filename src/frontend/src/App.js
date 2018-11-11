@@ -148,7 +148,7 @@ class App extends React.Component {
                 onClose={() => this.setState({ showCompleteTaskPopout: false })}
             >
                 <h2>Ошибка</h2>
-                <p>Вы должны находиться в зоне выполнения задачи</p>
+                <p>Вы должны находиться в зоне завершения задачи</p>
             </Alert>
         ) : null;
 
