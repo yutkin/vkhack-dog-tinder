@@ -7,6 +7,8 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 
 import { Map, Placemark } from 'react-yandex-maps';
 
+import { takeTask } from '../api/snek';
+
 import './Task.css';
 
 const osname = platform();
@@ -16,8 +18,11 @@ export default class Task extends React.Component {
         super(props);
 
         this.state = {
-            taken: false
+            taken: this.props.task.persons_applied.includes(
+                String(this.props.currentUser.id)
+            )
         };
+        this.onTakeTask = this.onTakeTask.bind(this);
     }
 
     static propTypes = {
@@ -26,6 +31,12 @@ export default class Task extends React.Component {
         onClose: PropTypes.func.isRequired,
         onComplete: PropTypes.func.isRequired,
         onDiscard: PropTypes.func.isRequired,
+    }
+
+    async onTakeTask() {
+        this.setState({ taken: true });
+
+        await takeTask(this.props.task.id, this.props.currentUser.id);
     }
 
     render() {
@@ -75,7 +86,7 @@ export default class Task extends React.Component {
                 <Group title={this.state.taken ? 'Вы выполняете эту задачу' : 'Действия'}>
                     {!this.state.taken && (
                         <CellButton
-                            onClick={() => this.setState({ taken: true })}>
+                            onClick={this.onTakeTask}>
                             Взять задачу
                         </CellButton>
                     )}
@@ -94,58 +105,6 @@ export default class Task extends React.Component {
                         </React.Fragment>
                     )}
                 </Group>
-
-                {/* <Group>
-                    <Div>{match.description}</Div>
-                </Group>
-
-                <Group title="На карте">
-                    <div className="match-map">
-                        <Map
-                            defaultState={{ center: [match.lat, match.lon], zoom: 12 }}
-                            width="100%"
-                            height={300}
-                        >
-                            <Placemark geometry={[match.lat, match.lon]} />
-                        </Map>
-                    </div>
-                    <Cell>
-                        <Button
-                            size="xl"
-                            level="secondary"
-                            component="a"
-                            href={`https://yandex.ru/maps/?z=12&ll=${match.lon},${match.lat}&l=map&rtext=~${match.lat},${match.lon}`}
-                            target="_blank">
-                            Проложить маршрут
-                        </Button>
-                    </Cell>
-                </Group>
-
-                <Group title="Вы идете с">
-                    <Cell
-                        before={
-                            <Avatar src={user.photo_100} />
-                        }>
-                        {`${user.first_name} ${user.last_name}`}
-                    </Cell>
-                    <Cell>
-                        <Button
-                            size="xl"
-                            level="primary"
-                            component="a"
-                            href={`https://vk.me/id${user.id}`}>
-                            Написать сообщение
-                        </Button>
-                    </Cell>
-                </Group>
-
-                <Group title="Действия">
-                    <CellButton
-                        level="danger"
-                        onClick={() => this.props.onDiscard()}>
-                        Отказаться от встречи
-                    </CellButton>
-                </Group> */}
             </React.Fragment>
         );
     }

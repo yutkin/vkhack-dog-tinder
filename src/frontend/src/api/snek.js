@@ -64,3 +64,19 @@ export async function getTasks() {
     });
     return response.json();
 }
+
+export async function takeTask(taskId, userId) {
+    const request = new Request(getEndpointURL(`tasks/apply/${taskId}`));
+    const response = await fetch(request, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: taskId,
+            user_id: userId
+        })
+    });
+    return response;
+}
