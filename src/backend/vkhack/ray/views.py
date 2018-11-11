@@ -137,9 +137,23 @@ def users_matched(request, uid):
         & (Q(liked_by_one=uid) | Q(liked_by_two=uid))
     )
 
+
+
     serializer = AnimalSerializer(animals, many=True)
 
-    return JsonResponse(serializer.data, safe=False)
+    data = serializer.data
+    seen_before = set()
+
+    res = []
+    for item in data:
+        if item["liked_by_one"] == uid and item["liked_by_two"] not in seen_before:
+            res.append(item)
+            seen_before.add(item["liked_by_two"])
+        elif item["liked_by_two"] == uid and item["liked_by_one"] not in seen_before:
+            res.append(item)
+            seen_before.add(item["liked_by_one"])
+
+    return JsonResponse(res, safe=False)
 
 
 @api_view(["GET", "POST"])
@@ -184,7 +198,6 @@ def task_apply(request, pk):
     task.save()
 
     return HttpResponse(status=200)
-
 
 
 @api_view(["POST"])
