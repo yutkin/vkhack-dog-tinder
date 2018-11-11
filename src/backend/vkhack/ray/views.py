@@ -189,12 +189,11 @@ def task_done(request, pk):
     except Task.DoesNotExist:
         return HttpResponse(status=404)
 
-    new_val = task.persons_applied + 1
+    data = JSONParser().parse(request)
+    user_id = str(data.get("user_id"))
 
-    if new_val > task.persons_needed:
-        return HttpResponse(status=400)
-
-    task.persons_applied = new_val
+    applied = task.persons_applied.split(",")
+    task.persons_applied = ",".join([item for item in applied if item != user_id])
     task.save()
 
     return HttpResponse(status=200)
