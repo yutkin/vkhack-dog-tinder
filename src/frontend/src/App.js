@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader, platform, IOS, ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
+import { View, Epic, Tabbar, TabbarItem, Panel, PanelHeader, platform, IOS, ActionSheet, ActionSheetItem, Alert } from '@vkontakte/vkui';
 import Icon28Favorite from '@vkontakte/icons/dist/28/favorite';
 import Icon28Place from '@vkontakte/icons/dist/28/place';
 import Icon28More from '@vkontakte/icons/dist/28/more';
-import connect from '@vkontakte/vkui-connect';
-// import connect from '@vkontakte/vkui-connect-mock';
+// import connect from '@vkontakte/vkui-connect';
+import connect from '@vkontakte/vkui-connect-mock';
 
 import Discover from './panels/Discover';
 import Matches from './panels/Matches';
 import Match from './panels/Match';
 import Tasks from './panels/Tasks';
+import Task from './panels/Task';
 
 import { discardMatch } from './api/snek';
 
@@ -30,13 +31,21 @@ class App extends React.Component {
             accessToken: null,
             activeMatch: null,
             geoData: null,
-            showDiscardMatchPopout: false
+            showDiscardMatchPopout: false,
+
+            activeTask: null,
+            showDiscardTaskPopout: false
         };
         this.handleConnectEvent = this.handleConnectEvent.bind(this);
         this.onStoryChange = this.onStoryChange.bind(this);
         this.openMatchPanel = this.openMatchPanel.bind(this);
         this.closeMatchPanel = this.closeMatchPanel.bind(this);
         this.showDiscardMatchPopuot = this.showDiscardMatchPopuot.bind(this);
+
+        this.openTaskPanel = this.openTaskPanel.bind(this);
+        this.closeTaskPanel = this.closeTaskPanel.bind(this);
+        this.showDiscardTaskPopuot = this.showDiscardTaskPopuot.bind(this);
+        this.showCompleteTaskPopout = this.showCompleteTaskPopout.bind(this);
     }
 
     componentDidMount() {
@@ -60,7 +69,7 @@ class App extends React.Component {
     }
   
     onStoryChange(e) {
-        this.setState({ activeStory: e.currentTarget.dataset.story, activeMatch: null })
+        this.setState({ activeStory: e.currentTarget.dataset.story, activeMatch: null, activeTask: null })
     }
 
     openMatchPanel(match, user) {
@@ -80,6 +89,26 @@ class App extends React.Component {
         this.closeMatchPanel();
     }
 
+    openTaskPanel(activeTask) {
+        this.setState({ activeTask });
+    }
+
+    closeTaskPanel() {
+        this.setState({ activeTask: null });
+    }
+
+    showDiscardTaskPopuot() {
+        this.setState({ showDiscardTaskPopout: true });
+    }
+
+    async discardTask() {
+        this.closeTaskPanel();
+    }
+
+    showCompleteTaskPopout() {
+        this.setState({ showCompleteTaskPopout: true });
+    }
+
     render () {
         if (!this.state.currentUser || !this.state.accessToken) return null; // must be a spinner
 
@@ -87,7 +116,6 @@ class App extends React.Component {
             <ActionSheet
                 onClose={() => this.setState({ showDiscardMatchPopout: false })}
                 title="Отказаться от встречи?"
-                // text="I am action sheet"
             >
                 <ActionSheetItem
                     autoclose
@@ -96,6 +124,35 @@ class App extends React.Component {
                 {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
             </ActionSheet>
         ) : null;
+
+        const discardTaskPopout = this.state.showDiscardTaskPopout ? (
+            <ActionSheet
+                onClose={() => this.setState({ showDiscardTaskPopout: false })}
+                title="Отказаться от выполнения задачи?"
+            >
+                <ActionSheetItem
+                    autoclose
+                    theme="destructive"
+                    onClick={() => this.discardTask()}>Отказаться</ActionSheetItem>
+                {osname === IOS && <ActionSheetItem autoclose theme="cancel">Отмена</ActionSheetItem>}
+            </ActionSheet>
+        ) : null;
+
+        const completeTaskPopout = this.state.showCompleteTaskPopout ? (
+            <Alert
+                actions={[{
+                    title: 'OK',
+                    autoclose: true,
+                    // style: 'destructive'
+                }]}
+                onClose={() => this.setState({ showCompleteTaskPopout: false })}
+            >
+                <h2>Ошибка</h2>
+                <p>Вы должны находиться в зоне выполнения задачи</p>
+            </Alert>
+        ) : null;
+
+        const tasksViewPopout = discardTaskPopout || completeTaskPopout;
 
         return (
             <Epic activeStory={this.state.activeStory} tabbar={
@@ -146,9 +203,24 @@ class App extends React.Component {
                         <Discover currentUser={this.state.currentUser} accessToken={this.state.accessToken} />
                     </Panel>
                 </View>
-                <View id="tasks" activePanel="tasks">
+
+                <View
+                    id="tasks"
+                    activePanel={this.state.activeTask ? 'task' : 'tasks'}
+                    popout={tasksViewPopout}>
                     <Panel id="tasks">
-                        <Tasks />
+                        <Tasks onTaskSelect={this.openTaskPanel} />
+                    </Panel>
+
+                    <Panel id="task">
+                        {this.state.activeTask && (
+                            <Task
+                                task={this.state.activeTask}
+                                currentUser={this.state.currentUser}
+                                onClose={this.closeTaskPanel}
+                                onComplete={this.showCompleteTaskPopout}
+                                onDiscard={this.showDiscardTaskPopuot} />
+                        )}
                     </Panel>
                 </View>
             </Epic>

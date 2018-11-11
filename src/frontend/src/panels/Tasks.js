@@ -19,7 +19,7 @@ export default class Tasks extends React.Component {
     static propTypes = {
         currentUser: PropTypes.object.isRequired,
         accessToken: PropTypes.string.isRequired,
-        // onMatchSelect: PropTypes.func.isrequired
+        onTaskSelect: PropTypes.func.isrequired
     }
 
     componentWillMount() {
@@ -35,10 +35,9 @@ export default class Tasks extends React.Component {
     }
 
     onTaskClick(e) {
-        // this.props.onMatchSelect(
-        //     this.state.matches.find(({id}) => id === Number(e.currentTarget.dataset.matchId)),
-        //     this.state.usersById[Number(e.currentTarget.dataset.userId)]
-        // );
+        this.props.onTaskSelect(
+            this.state.tasks.find(({id}) => id === Number(e.currentTarget.dataset.taskId))
+        );
     }
 
     render() {
@@ -73,11 +72,10 @@ export default class Tasks extends React.Component {
                         return (
                             <Cell
                                 key={task.id}
-                                before={
-                                    <Icon24Work />
-                                }
+                                before={<Icon24Work />}
                                 description={task.description}
-                                onClick={this.onTaskClick}>
+                                onClick={this.onTaskClick}
+                                data-task-id={task.id}>
                                 {task.title}
                             </Cell>
                         );
