@@ -221,7 +221,8 @@ class App extends React.Component {
                                 currentUser={this.state.currentUser}
                                 onClose={this.closeTaskPanel}
                                 onComplete={this.showCompleteTaskPopout}
-                                onDiscard={this.showDiscardTaskPopuot} />
+                                onDiscard={this.showDiscardTaskPopuot}
+                                accessToken={this.state.accessToken} />
                         )}
                     </Panel>
                 </View>
