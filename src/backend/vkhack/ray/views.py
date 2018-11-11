@@ -9,6 +9,8 @@ from django.db.models import Q
 
 import logging
 import requests
+from haversine import haversine
+
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +160,12 @@ def task_list(request):
         task = Task.objects.all()
 
         serializer = TaskSerializer(task, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        data = serializer.data
+        for item in data:
+            item["persons_applied"] = item["persons_applied"].split(",")
+            item["persons_applied"] = [i for i in item["persons_applied"] if i != "0"]
+
+        return JsonResponse(data, safe=False)
 
 
 @api_view(["POST"])
@@ -168,12 +175,43 @@ def task_apply(request, pk):
     except Task.DoesNotExist:
         return HttpResponse(status=404)
 
-    new_val = task.persons_applied + 1
+    data = JSONParser().parse(request)
+    user_id = str(data.get("user_id"))
 
-    if new_val > task.persons_needed:
-        return HttpResponse(status=400)
+    arr = task.persons_applied.split(",") + [user_id]
 
-    task.persons_applied = new_val
+    task.persons_applied = ",".join(set(arr))
     task.save()
 
     return HttpResponse(status=200)
+
+
+
+@api_view(["POST"])
+def task_done(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return HttpResponse(status=404)
+
+    data = JSONParser().parse(request)
+    user_id = str(data.get("user_id"))
+
+    user_lat = data.get("lat")
+    user_lon = data.get("lon")
+
+    d = 1e9
+    if user_lat and user_lon:
+        try:
+            d = haversine(task.lat, task.lon, user_lat, user_lon)
+        except Exception:
+            pass
+
+    if d < 0.1: # 100m
+        applied = task.persons_applied.split(",")
+        task.persons_applied = ",".join([item for item in applied if item != user_id])
+        task.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=204)
+

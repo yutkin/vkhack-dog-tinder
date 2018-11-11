@@ -27,7 +27,7 @@ class Task(models.Model):
     start_date = models.DateTimeField()
 
     persons_needed = models.IntegerField()
-    persons_applied = models.IntegerField(default=0)
+    persons_applied = models.TextField(default="")
 
     lat = models.FloatField()
     lon = models.FloatField()
