@@ -95,25 +95,9 @@ def animal_list(request):
         limit = int(request.GET.get("limit", 15))
 
         if user_id:
-            liked_by_me = Animal.objects.filter(
-                Q(liked_by_one=user_id) | Q(liked_by_two=user_id)
-            )
-
-            matched_with_me = []
-
-            for a in liked_by_me:
-                if a.liked_by_one == user_id:
-                    matched_with_me.append(a.liked_by_two)
-                else:
-                    matched_with_me.append(a.liked_by_one)
-
             animals = Animal.objects.filter(
-                ~Q(liked_by_one=user_id)
-                & ~Q(liked_by_two=user_id)
+                ~Q(liked_by_one=user_id) & ~Q(liked_by_two=user_id)
                 & (Q(liked_by_one=None) | Q(liked_by_two=None))
-            ).filter(
-                ~Q(liked_by_one__in=matched_with_me)
-                & ~Q(liked_by_two__in=matched_with_me)
             )
 
         else:
@@ -149,7 +133,7 @@ def users_matched(request, uid):
     animals = Animal.objects.filter(
         (~Q(liked_by_one=None) & ~Q(liked_by_two=None))
         & (Q(liked_by_one=uid) | Q(liked_by_two=uid))
-    )[:15]
+    )
 
     serializer = AnimalSerializer(animals, many=True)
 
