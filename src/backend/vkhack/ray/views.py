@@ -9,6 +9,8 @@ from django.db.models import Q
 
 import logging
 import requests
+from haversine import haversine
+
 
 logger = logging.getLogger(__name__)
 
@@ -184,6 +186,10 @@ def task_apply(request, pk):
     return HttpResponse(status=200)
 
 
+def calc_dist(x1, y1, x2, y2):
+
+
+
 @api_view(["POST"])
 def task_done(request, pk):
     try:
@@ -194,14 +200,21 @@ def task_done(request, pk):
     data = JSONParser().parse(request)
     user_id = str(data.get("user_id"))
 
-    lat = data.get("lat")
-    lon = data.get("lon")
+    user_lat = data.get("lat")
+    user_lon = data.get("lon")
 
-    # if lat and lon:
-    #     calc_dist(task.lat, task.lon, )
+    d = 1e9
+    if user_lat and user_lon:
+        try:
+            d = haversine(task.lat, task.lon, user_lat, user_lon)
+        except Exception:
+            pass
 
-    applied = task.persons_applied.split(",")
-    task.persons_applied = ",".join([item for item in applied if item != user_id])
-    task.save()
+    if d < 0.1: # 100m
+        applied = task.persons_applied.split(",")
+        task.persons_applied = ",".join([item for item in applied if item != user_id])
+        task.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=204)
 
-    return HttpResponse(status=200)
